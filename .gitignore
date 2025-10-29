@@ -218,4 +218,7 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
+# Excel files
+*.csv
+
 # End of https://www.toptal.com/developers/gitignore/api/visualstudiocode,windows,python
