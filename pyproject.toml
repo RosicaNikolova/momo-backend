@@ -1,0 +1,27 @@
+[tool.ruff]
+line-length = 100
+target-version = "py314"
+
+[tool.ruff.lint]
+select = [
+    "E",  # pycodestyle errors
+    "W",  # pycodestyle warnings
+    "F",  # pyflakes
+    "I",  # isort
+    "C",  # flake8-comprehensions
+    "B",  # flake8-bugbear
+]
+ignore = [
+    "E501",  # line too long (Black handles this)
+]
+
+[tool.black]
+line-length = 100
+target-version = ['py314']
+
+[tool.mypy]
+python_version = "3.14"
+ignore_missing_imports = true
+warn_return_any = true
+warn_unused_configs = true
+```
