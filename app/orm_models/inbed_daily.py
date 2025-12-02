@@ -9,13 +9,14 @@ class InBedDaily(Base):
     Represents one day's Bedsense data for a resident.
     All time-related values are stored in seconds.
     """
+
     __tablename__ = "inbed_daily"
 
     id = Column(Integer, primary_key=True, index=True)
     date = Column(Date, index=True)
-    time_in_bed = Column(Float)              # total time in bed (sec)
-    at_rest = Column(Float)                  # time lying still (sec)
-    low_activity = Column(Float)             # small movements (sec)
+    time_in_bed = Column(Float)  # total time in bed (sec)
+    at_rest = Column(Float)  # time lying still (sec)
+    low_activity = Column(Float)  # small movements (sec)
     # restlessness / large movements (sec)
     high_activity = Column(Float)
     # how many times out of bed during night

@@ -31,7 +31,9 @@ from typing import List, Tuple, Any
 #     return [(r[0], r[1]) for r in rows]
 
 
-def get_last_n_metric_rows(resident_id: int, metric: str,  limit: int, db: Session) -> List[Tuple[Any, Any]]:
+def get_last_n_metric_rows(
+    resident_id: int, metric: str, limit: int, db: Session
+) -> List[Tuple[Any, Any]]:
     """Return up to last `n` rows as (date, value) for a chosen metric.
 
     Allowed metrics map to columns on the InBedDaily model. Returns rows in

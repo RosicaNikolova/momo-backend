@@ -16,16 +16,17 @@ async def lifespan(app: FastAPI):
     yield
     # runs once at shutdown (optional cleanup)
 
+
 # Initialize app
 app = FastAPI(lifespan=lifespan)
 
 # Configure CORS
 origins = [
-    "http://localhost:3000",    # React default port
-    "http://localhost:5173",    # Vite default port
+    "http://localhost:3000",  # React default port
+    "http://localhost:5173",  # Vite default port
     "http://127.0.0.1:3000",
     "http://127.0.0.1:5173",
-    "http://localhost:8080",    # Additional common frontend port
+    "http://localhost:8080",  # Additional common frontend port
 ]
 
 app.add_middleware(

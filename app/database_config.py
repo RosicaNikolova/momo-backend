@@ -14,6 +14,7 @@ engine = create_engine(DATABASE_URL, connect_args=connect_args)
 # SessionLocal gives each request its own DB session
 SessionLocal = sessionmaker(bind=engine, autoflush=False, autocommit=False)
 
+
 # Base class: all your model classes will inherit from this
 class Base(DeclarativeBase):
     pass

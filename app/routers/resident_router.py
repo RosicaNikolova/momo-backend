@@ -18,10 +18,13 @@ MIN_LIMIT = 1
 @router.get("/", response_model=List[ResidentRead])
 def get_residents(
     db: Session = Depends(get_db),
-    offset: int = Query(DEFAULT_OFFSET, ge=0,
-                        description="Number of rows to skip"),
-    limit: int = Query(DEFAULT_LIMIT, ge=MIN_LIMIT, le=MAX_LIMIT,
-                       description=f"Max rows to return (capped at {MAX_LIMIT})"),
+    offset: int = Query(DEFAULT_OFFSET, ge=0, description="Number of rows to skip"),
+    limit: int = Query(
+        DEFAULT_LIMIT,
+        ge=MIN_LIMIT,
+        le=MAX_LIMIT,
+        description=f"Max rows to return (capped at {MAX_LIMIT})",
+    ),
 ) -> List[ResidentRead]:
     """List residents with simple pagination.
 

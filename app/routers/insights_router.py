@@ -33,7 +33,9 @@ router = APIRouter(prefix="/api/insights", tags=["Insights"])
 
 
 @router.get("/trend/{metric}/{resident_id}", response_model=TrendRead)
-def get_metric_trend(metric: Metric, resident_id: int, db: Session = Depends(get_db)) -> TrendRead:
+def get_metric_trend(
+    metric: Metric, resident_id: int, db: Session = Depends(get_db)
+) -> TrendRead:
     """
     Trend endpoint that accepts a metric name and resident id.
     Unknown metrics return HTTP 400.
@@ -42,8 +44,7 @@ def get_metric_trend(metric: Metric, resident_id: int, db: Session = Depends(get
     insight = trend_service.compute_trend(resident_id, metric.value, db)
 
     if not insight:
-        raise HTTPException(
-            status_code=404, detail="No data found for this resident.")
+        raise HTTPException(status_code=404, detail="No data found for this resident.")
     return insight
 
 
@@ -60,10 +61,12 @@ def get_metric_changepoints(
     """
     # Service handles penalty selection internally; router does not expose tuning.
     result = change_point_service.compute_change_points(
-        resident_id, metric.value, db, limit=30)
+        resident_id, metric.value, db, limit=30
+    )
     if not result:
         raise HTTPException(
-            status_code=404, detail="No data found or change-point detection failed")
+            status_code=404, detail="No data found or change-point detection failed"
+        )
     return result
 
 
@@ -79,9 +82,9 @@ def get_metric_anomalies(
     - The detector uses a conservative threshold and does not expose tuning
       via the API; it's intended as a lightweight anomaly signal for insights.
     """
-    result = anomaly_service.compute_anomalies(
-        resident_id, metric.value, db, limit=30)
+    result = anomaly_service.compute_anomalies(resident_id, metric.value, db, limit=30)
     if not result:
         raise HTTPException(
-            status_code=404, detail="No data found or anomaly detection failed")
+            status_code=404, detail="No data found or anomaly detection failed"
+        )
     return result

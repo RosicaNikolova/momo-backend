@@ -29,14 +29,15 @@ def records_to_df(rows: List[Tuple[Any, Any]]) -> pd.DataFrame:
     The repository returns a list of tuples (date, value) ordered oldest->newest.
     """
     # If no rows, return an empty DataFrame with the expected columns.
-    return pd.DataFrame(rows, columns=["date", "value"]) if rows else pd.DataFrame(columns=["date", "value"])
+    return (
+        pd.DataFrame(rows, columns=["date", "value"])
+        if rows
+        else pd.DataFrame(columns=["date", "value"])
+    )
 
 
 def compute_change_points(
-    resident_id: int,
-    metric: str,
-    db: Session,
-    limit: int = 30
+    resident_id: int, metric: str, db: Session, limit: int = 30
 ) -> ChangePointRead | None:
     """Detect change points on the last `limit` rows for `metric`.
 
@@ -48,7 +49,8 @@ def compute_change_points(
     """
     # fetch rows (date, value) returned oldest->newest
     rows: List[Tuple[Any, Any]] = insights_repository.get_last_n_metric_rows(
-        resident_id, metric, limit, db)
+        resident_id, metric, limit, db
+    )
     if not rows or len(rows) < 2:
         return None
 
@@ -95,8 +97,7 @@ def compute_change_points(
 
     # map to dates and formatted values
     cp_dates = [str(df.iloc[i]["date"]) for i in cp_indices]
-    cp_values = [_format_seconds_h_min(
-        df.iloc[i]["value"]) for i in cp_indices]
+    cp_values = [_format_seconds_h_min(df.iloc[i]["value"]) for i in cp_indices]
 
     description = f"Detected {len(cp_indices)} change points using PELT (l2) over last {len(df)} days."
 

@@ -11,6 +11,7 @@ deterministic:
 The endpoint and service intentionally do not expose internal tuning (threshold)
 to the API; values are chosen to be conservative for short windows (30 rows).
 """
+
 from typing import Any, List, Tuple
 import pandas as pd
 from app.repository.insights_repository import get_last_n_metric_rows
@@ -25,7 +26,11 @@ def records_to_df(rows: List[Tuple[Any, Any]]) -> pd.DataFrame:
     """
     # If no rows, return an empty DataFrame with the expected columns.
     # returning an empty DataFrame lets downstream code call ffill/bfill safely
-    return pd.DataFrame(rows, columns=["date", "value"]) if rows else pd.DataFrame(columns=["date", "value"])
+    return (
+        pd.DataFrame(rows, columns=["date", "value"])
+        if rows
+        else pd.DataFrame(columns=["date", "value"])
+    )
 
 
 def format_seconds_h_min(val_sec: float) -> str:
@@ -49,7 +54,9 @@ def format_seconds_h_min(val_sec: float) -> str:
     return f"{minutes}min"
 
 
-def compute_anomalies(resident_id: int, metric: str, db, limit: int = 30) -> AnomalyRead | None:
+def compute_anomalies(
+    resident_id: int, metric: str, db, limit: int = 30
+) -> AnomalyRead | None:
     """Compute anomalies for a resident/metric over the last `limit` rows.
 
     Returns a plain dict suitable for FastAPI to serialize to `AnomalyRead`.
@@ -101,8 +108,7 @@ def compute_anomalies(resident_id: int, metric: str, db, limit: int = 30) -> Ano
     anomalies_idx = [int(i) for i in df.index[mask]]
     # Format anomaly values (seconds) into human-readable strings using the
     # repository-local helper so API returns consistent, user-friendly units.
-    anomalies_vals = [format_seconds_h_min(
-        v) for v in df.loc[mask, "value"].tolist()]
+    anomalies_vals = [format_seconds_h_min(v) for v in df.loc[mask, "value"].tolist()]
     anomalies_dates = df.loc[mask, "date"].tolist()
 
     n_anom = len(anomalies_idx)
