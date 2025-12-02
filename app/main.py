@@ -1,7 +1,6 @@
 from fastapi import FastAPI, Depends
 from fastapi.middleware.cors import CORSMiddleware
-from .database_config import SessionLocal, Base, engine
-from sqlalchemy import text
+from .database_config import Base, engine
 from sqlalchemy.orm import Session
 from contextlib import asynccontextmanager
 from app.orm_models.inbed_daily import InBedDaily

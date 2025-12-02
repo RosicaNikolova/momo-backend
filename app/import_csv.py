@@ -1,9 +1,7 @@
 import pandas as pd
 from sqlalchemy.orm import Session
-from datetime import datetime
 
 from app.database_config import SessionLocal
-from app.orm_models.resident import Resident
 from app.orm_models.inbed_daily import InBedDaily
 
 # Paths to your CSV files (adjust names if needed)
