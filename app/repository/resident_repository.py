@@ -8,6 +8,7 @@ from app.orm_models.resident import Resident
 def get_residents(db: Session, offset: int = 0, limit: int = 50) -> List[Resident]:
     """Return a list of Resident ORM objects.
 
+
     Parameters
     - db: SQLAlchemy Session (injected by dependency)
     - offset: number of rows to skip (for pagination)
