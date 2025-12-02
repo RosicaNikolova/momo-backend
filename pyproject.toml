@@ -24,4 +24,3 @@ python_version = "3.14"
 ignore_missing_imports = true
 warn_return_any = true
 warn_unused_configs = true
-```
