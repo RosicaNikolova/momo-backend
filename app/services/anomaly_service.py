@@ -92,8 +92,17 @@ def compute_anomalies(
     mu = df["value"].mean()
     sigma = df["value"].std(ddof=0)
 
+    # Return empty result instead of None when data exists but has no variance
     if sigma == 0 or len(df["value"]) < 2 or pd.isna(sigma):
-        return None
+        return AnomalyRead(
+            resident_id=resident_id,
+            metric=metric,
+            n_anomalies=0,
+            anomaly_indices=[],
+            anomaly_dates=[],
+            anomaly_values=[],
+            description="no anomalies detected (insufficient variance)"
+        )
 
     # Conservative threshold for short windows. Kept internal deliberately.
     threshold = 1.0
@@ -108,7 +117,8 @@ def compute_anomalies(
     anomalies_idx = [int(i) for i in df.index[mask]]
     # Format anomaly values (seconds) into human-readable strings using the
     # repository-local helper so API returns consistent, user-friendly units.
-    anomalies_vals = [format_seconds_h_min(v) for v in df.loc[mask, "value"].tolist()]
+    anomalies_vals = [format_seconds_h_min(
+        v) for v in df.loc[mask, "value"].tolist()]
     anomalies_dates = df.loc[mask, "date"].tolist()
 
     n_anom = len(anomalies_idx)

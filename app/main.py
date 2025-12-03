@@ -37,40 +37,11 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-
-# def get_db():
-#     db = SessionLocal()
-#     try:
-#         # return a value and then pause the function
-#         yield db
-#     finally:
-#         db.close()
-
 # Register routers
 app.include_router(insights_router.router)
 app.include_router(resident_router.router)
-
-# Define a simple route
 
 
 @app.get("/")
 def read_root():
     return {"message": "FastAPI is running successfully!"}
-
-
-# @app.get("/health/db")
-# def health_db(db: Session = Depends(get_db)):
-#     db.execute(text("SELECT 1"))   # simple test query
-#     return {"db": "ok"}
-
-
-@app.get("/data")
-def get_data(db: Session = Depends(get_db)):
-    records = db.query(InBedDaily).all()
-    return records
-
-
-@app.get("/resident")
-def get_resident(db: Session = Depends(get_db)):
-    records = db.query(Resident).all()
-    return records
