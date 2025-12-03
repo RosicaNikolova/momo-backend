@@ -1,0 +1,37 @@
+{
+    "sonarlint.connectedMode.project": {
+        "connectionId": "rosicanikolova",
+        "projectKey": "RosicaNikolova_momo-backend"
+    },
+    // Python formatting with Black
+    "editor.formatOnSave": true,
+    "[python]": {
+        "editor.defaultFormatter": "ms-python.black-formatter",
+        "editor.formatOnSave": true,
+        "editor.codeActionsOnSave": {
+            "source.organizeImports": "explicit",
+            "source.fixAll": "explicit"
+        }
+    },
+    // Black settings
+    "black-formatter.args": [
+        "--line-length=100"
+    ],
+    // Ruff settings (new native server)
+    "ruff.enable": true,
+    "ruff.nativeServer": true, // Use native server (new!)
+    "ruff.organizeImports": true,
+    "ruff.fixAll": true,
+    "ruff.configuration": "./pyproject.toml", // Points to your config
+    // Mypy settings (type checking)
+    "mypy-type-checker.args": [
+        "--config-file=pyproject.toml"
+    ],
+    "mypy-type-checker.importStrategy": "fromEnvironment",
+    // Python general settings
+    "python.analysis.typeCheckingMode": "basic",
+    "python.analysis.autoSearchPaths": true,
+    "python.analysis.useLibraryCodeForTypes": true,
+    // Optional: Show problems inline
+    "editor.inlineSuggest.enabled": true
+}

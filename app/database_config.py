@@ -1,6 +1,7 @@
 import os
+
 from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker, DeclarativeBase
+from sqlalchemy.orm import DeclarativeBase, sessionmaker
 
 # database URL
 DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./momo.db")
@@ -13,6 +14,7 @@ engine = create_engine(DATABASE_URL, connect_args=connect_args)
 
 # SessionLocal gives each request its own DB session
 SessionLocal = sessionmaker(bind=engine, autoflush=False, autocommit=False)
+
 
 # Base class: all your model classes will inherit from this
 class Base(DeclarativeBase):

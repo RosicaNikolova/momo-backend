@@ -1,10 +1,11 @@
 from typing import List
-from fastapi import APIRouter, Depends, Query
-from app.dependencies import get_db
+
+from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
+
+from app.dependencies import get_db
 from app.schemas.resident import ResidentRead
 from app.services import residents_service
-from fastapi import HTTPException
 
 router = APIRouter(prefix="/api/residents", tags=["Residents"])
 
@@ -18,10 +19,13 @@ MIN_LIMIT = 1
 @router.get("/", response_model=List[ResidentRead])
 def get_residents(
     db: Session = Depends(get_db),
-    offset: int = Query(DEFAULT_OFFSET, ge=0,
-                        description="Number of rows to skip"),
-    limit: int = Query(DEFAULT_LIMIT, ge=MIN_LIMIT, le=MAX_LIMIT,
-                       description=f"Max rows to return (capped at {MAX_LIMIT})"),
+    offset: int = Query(DEFAULT_OFFSET, ge=0, description="Number of rows to skip"),
+    limit: int = Query(
+        DEFAULT_LIMIT,
+        ge=MIN_LIMIT,
+        le=MAX_LIMIT,
+        description=f"Max rows to return (capped at {MAX_LIMIT})",
+    ),
 ) -> List[ResidentRead]:
     """List residents with simple pagination.
 

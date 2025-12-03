@@ -1,6 +1,7 @@
-from sqlalchemy import Column, Integer, String, Date
-from ..database_config import Base
+from sqlalchemy import Column, Integer, String
 from sqlalchemy.orm import relationship
+
+from ..database_config import Base
 
 
 class Resident(Base):

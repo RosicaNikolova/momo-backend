@@ -11,8 +11,11 @@ deterministic:
 The endpoint and service intentionally do not expose internal tuning (threshold)
 to the API; values are chosen to be conservative for short windows (30 rows).
 """
+
 from typing import Any, List, Tuple
+
 import pandas as pd
+
 from app.repository.insights_repository import get_last_n_metric_rows
 from app.schemas.anomaly_get import AnomalyRead
 
@@ -25,7 +28,11 @@ def records_to_df(rows: List[Tuple[Any, Any]]) -> pd.DataFrame:
     """
     # If no rows, return an empty DataFrame with the expected columns.
     # returning an empty DataFrame lets downstream code call ffill/bfill safely
-    return pd.DataFrame(rows, columns=["date", "value"]) if rows else pd.DataFrame(columns=["date", "value"])
+    return (
+        pd.DataFrame(rows, columns=["date", "value"])
+        if rows
+        else pd.DataFrame(columns=["date", "value"])
+    )
 
 
 def format_seconds_h_min(val_sec: float) -> str:
@@ -85,8 +92,17 @@ def compute_anomalies(resident_id: int, metric: str, db, limit: int = 30) -> Ano
     mu = df["value"].mean()
     sigma = df["value"].std(ddof=0)
 
+    # Return empty result instead of None when data exists but has no variance
     if sigma == 0 or len(df["value"]) < 2 or pd.isna(sigma):
-        return None
+        return AnomalyRead(
+            resident_id=resident_id,
+            metric=metric,
+            n_anomalies=0,
+            anomaly_indices=[],
+            anomaly_dates=[],
+            anomaly_values=[],
+            description="no anomalies detected (insufficient variance)",
+        )
 
     # Conservative threshold for short windows. Kept internal deliberately.
     threshold = 1.0
@@ -101,8 +117,7 @@ def compute_anomalies(resident_id: int, metric: str, db, limit: int = 30) -> Ano
     anomalies_idx = [int(i) for i in df.index[mask]]
     # Format anomaly values (seconds) into human-readable strings using the
     # repository-local helper so API returns consistent, user-friendly units.
-    anomalies_vals = [format_seconds_h_min(
-        v) for v in df.loc[mask, "value"].tolist()]
+    anomalies_vals = [format_seconds_h_min(v) for v in df.loc[mask, "value"].tolist()]
     anomalies_dates = df.loc[mask, "date"].tolist()
 
     n_anom = len(anomalies_idx)

@@ -1,7 +1,9 @@
-from sqlalchemy.orm import Session
 from typing import List
-from app.schemas.resident import ResidentRead
+
+from sqlalchemy.orm import Session
+
 from app.repository import resident_repository
+from app.schemas.resident import ResidentRead
 
 DEFAULT_OFFSET = 0
 MAX_LIMIT = 500
@@ -9,14 +11,15 @@ MIN_LIMIT = 1
 DEFAULT_LIMIT = 50
 
 
-def get_residents(db: Session, offset: int = DEFAULT_OFFSET, limit: int = DEFAULT_LIMIT) -> List[ResidentRead]:
+def get_residents(
+    db: Session, offset: int = DEFAULT_OFFSET, limit: int = DEFAULT_LIMIT
+) -> List[ResidentRead]:
 
     # Sanitize pagination parameters (defensive). Router also validates via Query.
     offset = max(DEFAULT_OFFSET, int(offset))
     limit = max(MIN_LIMIT, min(int(limit), MAX_LIMIT))
 
-    orm_residents = resident_repository.get_residents(
-        db, offset=offset, limit=limit)
+    orm_residents = resident_repository.get_residents(db, offset=offset, limit=limit)
 
     # Convert ORM -> Pydantic DTOs (Pydantic v2)
     return [ResidentRead.model_validate(r) for r in orm_residents]

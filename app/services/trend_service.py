@@ -1,10 +1,10 @@
-from typing import Optional, List, Tuple, Any
-from sqlalchemy.orm import Session
+from typing import Any, List, Tuple
+
 import pandas as pd
+from sqlalchemy.orm import Session
 
-from app.schemas.trend import TrendRead
 from app.repository import insights_repository
-
+from app.schemas.trend import TrendRead
 
 BASELINE: int = 28
 LAST7: int = 7
@@ -19,7 +19,11 @@ def records_to_df(rows: List[Tuple[Any, Any]]) -> pd.DataFrame:
     This helper ensures we always have a DataFrame with columns ["date","value"].
     """
     # If no rows, return an empty DataFrame with the expected columns.
-    return pd.DataFrame(rows, columns=["date", "value"]) if rows else pd.DataFrame(columns=["date", "value"])
+    return (
+        pd.DataFrame(rows, columns=["date", "value"])
+        if rows
+        else pd.DataFrame(columns=["date", "value"])
+    )
 
 
 def compute_baseline_last7(values: pd.Series) -> Tuple[float, float]:
@@ -105,7 +109,8 @@ def compute_trend(resident_id: int, metric: str, db: Session) -> TrendRead | Non
 
     # Fetch rows as (date, value)
     records: List[Tuple[Any, Any]] = insights_repository.get_last_n_metric_rows(
-        resident_id, metric, BASELINE, db)
+        resident_id, metric, BASELINE, db
+    )
 
     # quick guard: need at least 7 records to compute a 7-day average
     if not records or len(records) < LAST7:

@@ -1,6 +1,5 @@
 # app/schemas.py
 from pydantic import BaseModel, ConfigDict
-from datetime import date
 
 
 class TrendRead(BaseModel):

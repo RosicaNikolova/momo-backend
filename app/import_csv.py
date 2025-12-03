@@ -1,9 +1,7 @@
 import pandas as pd
 from sqlalchemy.orm import Session
-from datetime import datetime
 
 from app.database_config import SessionLocal
-from app.orm_models.resident import Resident
 from app.orm_models.inbed_daily import InBedDaily
 
 # Paths to your CSV files (adjust names if needed)
@@ -26,10 +24,16 @@ db: Session = SessionLocal()
 # print(f"Created new resident '{resident_name}' with ID {resident_id} ")
 
 # Load all CSVs with correct date parsing
-time_in_bed = pd.read_csv(FILE_TIME_IN_BED, parse_dates=[
-                          0], dayfirst=True, skipinitialspace=True, decimal=".")
-activity = pd.read_csv(FILE_ACTIVITY_IN_BED, parse_dates=[
-                       0], dayfirst=True, skipinitialspace=True, decimal=".")
+time_in_bed = pd.read_csv(
+    FILE_TIME_IN_BED, parse_dates=[0], dayfirst=True, skipinitialspace=True, decimal="."
+)
+activity = pd.read_csv(
+    FILE_ACTIVITY_IN_BED,
+    parse_dates=[0],
+    dayfirst=True,
+    skipinitialspace=True,
+    decimal=".",
+)
 times_out = pd.read_csv(FILE_TIMES_OUT_BED, parse_dates=[0], dayfirst=True)
 
 # Rename columns after reading
@@ -38,11 +42,7 @@ activity.columns = ["date", "at_rest", "low_activity", "high_activity"]
 times_out.columns = ["date", "times_out_bed_night", "times_out_bed_day"]
 
 # Merge all CSVs on 'date'
-merged = (
-    time_in_bed
-    .merge(activity, on="date")
-    .merge(times_out, on="date")
-)
+merged = time_in_bed.merge(activity, on="date").merge(times_out, on="date")
 
 # Convert date column to datetime
 merged["date"] = pd.to_datetime(merged["date"], errors="coerce").dt.date
@@ -65,7 +65,7 @@ for _, row in merged.iterrows():
         high_activity=row["high_activity"],
         times_out_bed_night=row["times_out_bed_night"],
         times_out_bed_day=row["times_out_bed_day"],
-        resident_id=1  # assume this data belongs to resident with ID=1
+        resident_id=1,  # assume this data belongs to resident with ID=1
     )
     db.add(record)
 

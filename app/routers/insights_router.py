@@ -1,13 +1,13 @@
+from enum import Enum
+
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
+
 from app.dependencies import get_db
-from app.schemas.trend import TrendRead
-from app.services import trend_service
-from app.services import change_point_service
-from app.services import anomaly_service
-from app.schemas.change_point import ChangePointRead
 from app.schemas.anomaly_get import AnomalyRead
-from enum import Enum
+from app.schemas.change_point import ChangePointRead
+from app.schemas.trend import TrendRead
+from app.services import anomaly_service, change_point_service, trend_service
 
 
 # Router-level allowed metrics
@@ -22,15 +22,6 @@ class Metric(str, Enum):
 router = APIRouter(prefix="/api/insights", tags=["Insights"])
 
 
-# # Define an endpoint to get time-in-bed insights for a resident, use path parameter
-# @router.get("/time_in_bed/{resident_id}", response_model=TimeInBedInsight)
-# def get_time_in_bed_insight(resident_id: int, db: Session = Depends(get_db)) -> TimeInBedInsight:
-#     insight = compute_time_in_bed_insight(resident_id, db)
-#     if not insight:
-#         raise HTTPException(
-#             status_code=404, detail="No data found for this resident.")
-#     return insight
-
 @router.get("/trend/{metric}/{resident_id}", response_model=TrendRead)
 def get_metric_trend(metric: Metric, resident_id: int, db: Session = Depends(get_db)) -> TrendRead:
     """
@@ -41,8 +32,7 @@ def get_metric_trend(metric: Metric, resident_id: int, db: Session = Depends(get
     insight = trend_service.compute_trend(resident_id, metric.value, db)
 
     if not insight:
-        raise HTTPException(
-            status_code=404, detail="No data found for this resident.")
+        raise HTTPException(status_code=404, detail="No data found for this resident.")
     return insight
 
 
@@ -58,11 +48,11 @@ def get_metric_changepoints(
     - The endpoint inspects the last 30 rows by default.
     """
     # Service handles penalty selection internally; router does not expose tuning.
-    result = change_point_service.compute_change_points(
-        resident_id, metric.value, db, limit=30)
+    result = change_point_service.compute_change_points(resident_id, metric.value, db, limit=30)
     if not result:
         raise HTTPException(
-            status_code=404, detail="No data found or change-point detection failed")
+            status_code=404, detail="No data found or change-point detection failed"
+        )
     return result
 
 
@@ -80,7 +70,5 @@ def get_metric_anomalies(
     """
     result = anomaly_service.compute_anomalies(resident_id, metric.value, db, limit=30)
     if not result:
-        raise HTTPException(
-            status_code=404, detail="No data found or anomaly detection failed")
+        raise HTTPException(status_code=404, detail="No data found or anomaly detection failed")
     return result
-
