@@ -11,8 +11,7 @@ Tests the complete HTTP request/response cycle for:
 
 def test_get_trend_success(client, sample_resident, sample_30_days_data):
     """Should return trend data for resident with sufficient data"""
-    response = client.get(
-        f"/api/insights/trend/time_in_bed/{sample_resident.id}")
+    response = client.get(f"/api/insights/trend/time_in_bed/{sample_resident.id}")
 
     assert response.status_code == 200
     data = response.json()
@@ -39,16 +38,14 @@ def test_get_trend_resident_not_found(client):
 
 def test_get_trend_invalid_metric(client, sample_resident):
     """Should return 422 for invalid metric name"""
-    response = client.get(
-        f"/api/insights/trend/invalid_metric/{sample_resident.id}")
+    response = client.get(f"/api/insights/trend/invalid_metric/{sample_resident.id}")
 
     assert response.status_code == 422
 
 
 def test_get_changepoints_success(client, sample_resident, sample_30_days_data):
     """Should return changepoint data structure"""
-    response = client.get(
-        f"/api/insights/changepoints/time_in_bed/{sample_resident.id}")
+    response = client.get(f"/api/insights/changepoints/time_in_bed/{sample_resident.id}")
 
     assert response.status_code == 200
     data = response.json()
@@ -77,16 +74,14 @@ def test_get_changepoints_resident_not_found(client):
 
 def test_get_changepoints_invalid_metric(client, sample_resident):
     """Should return 422 for invalid metric"""
-    response = client.get(
-        f"/api/insights/changepoints/invalid_metric/{sample_resident.id}")
+    response = client.get(f"/api/insights/changepoints/invalid_metric/{sample_resident.id}")
 
     assert response.status_code == 422
 
 
 def test_get_anomalies_success(client, sample_resident, sample_30_days_data):
     """Should return anomaly detection structure"""
-    response = client.get(
-        f"/api/insights/anomalies/time_in_bed/{sample_resident.id}")
+    response = client.get(f"/api/insights/anomalies/time_in_bed/{sample_resident.id}")
 
     assert response.status_code == 200
     data = response.json()
@@ -115,7 +110,6 @@ def test_get_anomalies_resident_not_found(client):
 
 def test_get_anomalies_invalid_metric(client, sample_resident):
     """Should return 422 for invalid metric"""
-    response = client.get(
-        f"/api/insights/anomalies/invalid_metric/{sample_resident.id}")
+    response = client.get(f"/api/insights/anomalies/invalid_metric/{sample_resident.id}")
 
     assert response.status_code == 422

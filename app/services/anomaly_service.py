@@ -56,9 +56,7 @@ def format_seconds_h_min(val_sec: float) -> str:
     return f"{minutes}min"
 
 
-def compute_anomalies(
-    resident_id: int, metric: str, db, limit: int = 30
-) -> AnomalyRead | None:
+def compute_anomalies(resident_id: int, metric: str, db, limit: int = 30) -> AnomalyRead | None:
     """Compute anomalies for a resident/metric over the last `limit` rows.
 
     Returns a plain dict suitable for FastAPI to serialize to `AnomalyRead`.
@@ -103,7 +101,7 @@ def compute_anomalies(
             anomaly_indices=[],
             anomaly_dates=[],
             anomaly_values=[],
-            description="no anomalies detected (insufficient variance)"
+            description="no anomalies detected (insufficient variance)",
         )
 
     # Conservative threshold for short windows. Kept internal deliberately.
@@ -119,8 +117,7 @@ def compute_anomalies(
     anomalies_idx = [int(i) for i in df.index[mask]]
     # Format anomaly values (seconds) into human-readable strings using the
     # repository-local helper so API returns consistent, user-friendly units.
-    anomalies_vals = [format_seconds_h_min(
-        v) for v in df.loc[mask, "value"].tolist()]
+    anomalies_vals = [format_seconds_h_min(v) for v in df.loc[mask, "value"].tolist()]
     anomalies_dates = df.loc[mask, "date"].tolist()
 
     n_anom = len(anomalies_idx)

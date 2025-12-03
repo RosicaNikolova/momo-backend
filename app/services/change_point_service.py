@@ -101,7 +101,9 @@ def compute_change_points(
     cp_dates = [str(df.iloc[i]["date"]) for i in cp_indices]
     cp_values = [_format_seconds_h_min(df.iloc[i]["value"]) for i in cp_indices]
 
-    description = f"Detected {len(cp_indices)} change points using PELT (l2) over last {len(df)} days."
+    description = (
+        f"Detected {len(cp_indices)} change points using PELT (l2) over last {len(df)} days."
+    )
 
     return ChangePointRead(
         resident_id=resident_id,

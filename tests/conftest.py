@@ -43,9 +43,7 @@ def test_engine():
 @pytest.fixture(scope="function")
 def test_db(test_engine):
     """Create a test database session"""
-    TestingSessionLocal = sessionmaker(
-        autocommit=False, autoflush=False, bind=test_engine
-    )
+    TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=test_engine)
     session = TestingSessionLocal()
     yield session
     session.close()
@@ -54,6 +52,7 @@ def test_db(test_engine):
 @pytest.fixture(scope="function")
 def client(test_db):
     """Create a test client with overridden database dependency"""
+
     def override_get_db():
         try:
             yield test_db
@@ -81,14 +80,14 @@ def sample_30_days_data(test_db, sample_resident):
     """Create 30 days of stable bed sensor data"""
     for i in range(30):
         record = InBedDaily(
-            date=date.today() - timedelta(days=29-i),
+            date=date.today() - timedelta(days=29 - i),
             time_in_bed=28800,  # 8 hours
             at_rest=20000,
             low_activity=5000,
             high_activity=3800,
             times_out_bed_night=2,
             times_out_bed_day=1,
-            resident_id=sample_resident.id
+            resident_id=sample_resident.id,
         )
         test_db.add(record)
     test_db.commit()

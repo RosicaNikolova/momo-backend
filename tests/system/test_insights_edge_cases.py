@@ -26,14 +26,14 @@ def resident_with_outlier(test_db, sample_resident):
             time_in_bed = 28800
 
         record = InBedDaily(
-            date=date.today() - timedelta(days=29-i),
+            date=date.today() - timedelta(days=29 - i),
             time_in_bed=time_in_bed,
             at_rest=20000,
             low_activity=5000,
             high_activity=3800,
             times_out_bed_night=2,
             times_out_bed_day=1,
-            resident_id=sample_resident.id
+            resident_id=sample_resident.id,
         )
         test_db.add(record)
     test_db.commit()
@@ -50,14 +50,14 @@ def resident_with_sleep_decline(test_db, sample_resident):
             time_in_bed = 14400  # 4 hours (sudden drop!)
 
         record = InBedDaily(
-            date=date.today() - timedelta(days=29-i),
+            date=date.today() - timedelta(days=29 - i),
             time_in_bed=time_in_bed,
             at_rest=20000,
             low_activity=5000,
             high_activity=3800,
             times_out_bed_night=2,
             times_out_bed_day=1,
-            resident_id=sample_resident.id
+            resident_id=sample_resident.id,
         )
         test_db.add(record)
     test_db.commit()
@@ -69,14 +69,14 @@ def resident_with_insufficient_data(test_db, sample_resident):
     """Create only 5 days of data (less than 7 needed for trend)"""
     for i in range(5):
         record = InBedDaily(
-            date=date.today() - timedelta(days=4-i),
+            date=date.today() - timedelta(days=4 - i),
             time_in_bed=28800,
             at_rest=20000,
             low_activity=5000,
             high_activity=3800,
             times_out_bed_night=2,
             times_out_bed_day=1,
-            resident_id=sample_resident.id
+            resident_id=sample_resident.id,
         )
         test_db.add(record)
     test_db.commit()
@@ -85,8 +85,7 @@ def resident_with_insufficient_data(test_db, sample_resident):
 
 def test_anomaly_detects_outlier(client, resident_with_outlier):
     """Should detect the extreme outlier in otherwise normal data"""
-    response = client.get(
-        f"/api/insights/anomalies/time_in_bed/{resident_with_outlier.id}")
+    response = client.get(f"/api/insights/anomalies/time_in_bed/{resident_with_outlier.id}")
 
     assert response.status_code == 200
     data = response.json()
@@ -95,8 +94,7 @@ def test_anomaly_detects_outlier(client, resident_with_outlier):
 
 def test_trend_detects_decline(client, resident_with_sleep_decline):
     """Should detect the sleep decline in last 7 days"""
-    response = client.get(
-        f"/api/insights/trend/time_in_bed/{resident_with_sleep_decline.id}")
+    response = client.get(f"/api/insights/trend/time_in_bed/{resident_with_sleep_decline.id}")
 
     assert response.status_code == 200
     data = response.json()
@@ -107,7 +105,8 @@ def test_trend_detects_decline(client, resident_with_sleep_decline):
 def test_changepoint_detects_break(client, resident_with_sleep_decline):
     """Should detect the sudden change at day 23"""
     response = client.get(
-        f"/api/insights/changepoints/time_in_bed/{resident_with_sleep_decline.id}")
+        f"/api/insights/changepoints/time_in_bed/{resident_with_sleep_decline.id}"
+    )
 
     assert response.status_code == 200
     data = response.json()
@@ -116,7 +115,6 @@ def test_changepoint_detects_break(client, resident_with_sleep_decline):
 
 def test_trend_insufficient_data(client, resident_with_insufficient_data):
     """Should return 404 when less than 7 days of data"""
-    response = client.get(
-        f"/api/insights/trend/time_in_bed/{resident_with_insufficient_data.id}")
+    response = client.get(f"/api/insights/trend/time_in_bed/{resident_with_insufficient_data.id}")
 
     assert response.status_code == 404

@@ -18,11 +18,7 @@ def get_residents(db: Session, offset: int = 0, limit: int = 50) -> List[Residen
     Returns a list (possibly empty) of Resident instances.
     """
     return (
-        db.query(Resident)
-        .order_by(Resident.id)
-        .offset(max(0, offset))
-        .limit(max(1, limit))
-        .all()
+        db.query(Resident).order_by(Resident.id).offset(max(0, offset)).limit(max(1, limit)).all()
     )
 
 
