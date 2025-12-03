@@ -13,7 +13,9 @@ to the API; values are chosen to be conservative for short windows (30 rows).
 """
 
 from typing import Any, List, Tuple
+
 import pandas as pd
+
 from app.repository.insights_repository import get_last_n_metric_rows
 from app.schemas.anomaly_get import AnomalyRead
 

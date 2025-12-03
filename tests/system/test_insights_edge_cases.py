@@ -8,8 +8,10 @@ Tests specific data scenarios like:
 - Insufficient data scenarios
 """
 from datetime import date, timedelta
-from app.orm_models.inbed_daily import InBedDaily
+
 import pytest
+
+from app.orm_models.inbed_daily import InBedDaily
 
 
 @pytest.fixture

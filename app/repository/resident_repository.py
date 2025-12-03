@@ -1,4 +1,5 @@
 from typing import List
+
 from sqlalchemy.orm import Session
 
 # Import the ORM model for residents

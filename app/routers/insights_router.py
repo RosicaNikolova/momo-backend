@@ -1,13 +1,13 @@
+from enum import Enum
+
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
+
 from app.dependencies import get_db
-from app.schemas.trend import TrendRead
-from app.services import trend_service
-from app.services import change_point_service
-from app.services import anomaly_service
-from app.schemas.change_point import ChangePointRead
 from app.schemas.anomaly_get import AnomalyRead
-from enum import Enum
+from app.schemas.change_point import ChangePointRead
+from app.schemas.trend import TrendRead
+from app.services import anomaly_service, change_point_service, trend_service
 
 
 # Router-level allowed metrics

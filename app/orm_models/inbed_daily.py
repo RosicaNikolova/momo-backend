@@ -1,6 +1,7 @@
 # app/models/inbed_daily.py
-from sqlalchemy import Column, Integer, Float, Date, ForeignKey
+from sqlalchemy import Column, Date, Float, ForeignKey, Integer
 from sqlalchemy.orm import relationship
+
 from ..database_config import Base
 
 

@@ -1,10 +1,11 @@
 from typing import List
-from fastapi import APIRouter, Depends, Query
-from app.dependencies import get_db
+
+from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
+
+from app.dependencies import get_db
 from app.schemas.resident import ResidentRead
 from app.services import residents_service
-from fastapi import HTTPException
 
 router = APIRouter(prefix="/api/residents", tags=["Residents"])
 

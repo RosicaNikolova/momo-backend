@@ -13,6 +13,7 @@ select = [
 ]
 ignore = [
     "E501",  # line too long (Black handles this)
+    "B008",  # Allow function calls in argument defaults (FastAPI Depends pattern)
 ]
 
 [tool.black]
@@ -23,4 +24,3 @@ target-version = ['py314']
 python_version = "3.14"
 ignore_missing_imports = true
 warn_return_any = true
-warn_unused_configs = true

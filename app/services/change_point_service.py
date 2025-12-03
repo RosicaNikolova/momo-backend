@@ -1,8 +1,10 @@
-from typing import List, Tuple, Any
-from sqlalchemy.orm import Session
+from typing import Any, List, Tuple
+
+import numpy as np
 import pandas as pd
 import ruptures as rpt
-import numpy as np
+from sqlalchemy.orm import Session
+
 from app.repository import insights_repository
 from app.schemas.change_point import ChangePointRead
 

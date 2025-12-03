@@ -1,10 +1,10 @@
-from typing import List, Tuple, Any
-from sqlalchemy.orm import Session
+from typing import Any, List, Tuple
+
 import pandas as pd
+from sqlalchemy.orm import Session
 
-from app.schemas.trend import TrendRead
 from app.repository import insights_repository
-
+from app.schemas.trend import TrendRead
 
 BASELINE: int = 28
 LAST7: int = 7

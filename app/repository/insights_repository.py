@@ -1,7 +1,9 @@
-from sqlalchemy.orm import Session
+from typing import Any, List, Tuple
+
 from sqlalchemy import desc
+from sqlalchemy.orm import Session
+
 from app.orm_models.inbed_daily import InBedDaily
-from typing import List, Tuple, Any
 
 
 def get_last_n_metric_rows(

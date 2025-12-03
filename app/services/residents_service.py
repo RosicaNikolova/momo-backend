@@ -1,7 +1,9 @@
-from sqlalchemy.orm import Session
 from typing import List
-from app.schemas.resident import ResidentRead
+
+from sqlalchemy.orm import Session
+
 from app.repository import resident_repository
+from app.schemas.resident import ResidentRead
 
 DEFAULT_OFFSET = 0
 MAX_LIMIT = 500

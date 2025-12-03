@@ -1,7 +1,7 @@
 
 from fastapi.testclient import TestClient
+
 from app.main import app
-from app.orm_models.resident import Resident
 
 """
 System tests for the Residents API endpoints.

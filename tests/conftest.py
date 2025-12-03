@@ -11,18 +11,19 @@ This file provides reusable test setup including:
 
 Fixtures are automatically available to all test files.
 """
+from datetime import date, timedelta
+
 import pytest
+from fastapi.testclient import TestClient
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.pool import StaticPool
-from fastapi.testclient import TestClient
 
 from app.database_config import Base
-from app.main import app
 from app.dependencies import get_db
-from app.orm_models.resident import Resident
+from app.main import app
 from app.orm_models.inbed_daily import InBedDaily
-from datetime import date, timedelta
+from app.orm_models.resident import Resident
 
 
 @pytest.fixture(scope="function")
