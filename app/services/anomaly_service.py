@@ -56,7 +56,7 @@ def format_seconds_h_min(val_sec: float) -> str:
     return f"{minutes}min"
 
 
-def compute_anomalies(resident_id: int, metric: str, db, limit: int = 30) -> AnomalyRead | None:
+def compute_anomalies(resident_id: int, metric: str, db, limit: int = 28) -> AnomalyRead | None:
     """Compute anomalies for a resident/metric over the last `limit` rows.
 
     Returns a plain dict suitable for FastAPI to serialize to `AnomalyRead`.

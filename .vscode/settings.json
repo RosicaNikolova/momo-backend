@@ -17,9 +17,9 @@
     "black-formatter.args": [
         "--line-length=100"
     ],
-    // Ruff settings (new native server)
+    // Ruff settings
     "ruff.enable": true,
-    "ruff.nativeServer": true, // Use native server (new!)
+    "ruff.nativeServer": true,
     "ruff.organizeImports": true,
     "ruff.fixAll": true,
     "ruff.configuration": "./pyproject.toml", // Points to your config

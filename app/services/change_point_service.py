@@ -39,7 +39,7 @@ def records_to_df(rows: List[Tuple[Any, Any]]) -> pd.DataFrame:
 
 
 def compute_change_points(
-    resident_id: int, metric: str, db: Session, limit: int = 30
+    resident_id: int, metric: str, db: Session, limit: int = 28
 ) -> ChangePointRead | None:
     """Detect change points on the last `limit` rows for `metric`.
 
