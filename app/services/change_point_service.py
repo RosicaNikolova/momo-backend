@@ -39,14 +39,14 @@ def records_to_df(rows: List[Tuple[Any, Any]]) -> pd.DataFrame:
 
 
 def compute_change_points(
-    resident_id: int, metric: str, db: Session, limit: int = 30
+    resident_id: int, metric: str, db: Session, limit: int = 28
 ) -> ChangePointRead | None:
     """Detect change points on the last `limit` rows for `metric`.
 
     Uses the PELT algorithm with an l2 cost and a penalty parameter to select
     the number of change points automatically. If `pen` is None the function
     computes a simple heuristic based on the signal variance and length.
-
+    
     Returns None when insufficient data.
     """
     # fetch rows (date, value) returned oldest->newest
