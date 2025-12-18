@@ -46,7 +46,7 @@ def compute_change_points(
     Uses the PELT algorithm with an l2 cost and a penalty parameter to select
     the number of change points automatically. If `pen` is None the function
     computes a simple heuristic based on the signal variance and length.
-    
+
     Returns None when insufficient data.
     """
     # fetch rows (date, value) returned oldest->newest
