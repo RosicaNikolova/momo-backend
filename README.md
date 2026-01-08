@@ -7,7 +7,6 @@ FastAPI backend that transforms bed sensor data from Momo Medical's Bedsense sys
 - **Sleep Trend Analysis**: Compare recent sleep patterns (7 days) against 28-day baseline
 - **Anomaly Detection**: Identify unusual sleep behavior using z-score analysis
 - **Change Point Detection**: Discover sudden shifts in sleep patterns with PELT algorithm
-- **Resident Management**: CRUD operations for managing residents
 
 ## Tech Stack
 
