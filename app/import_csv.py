@@ -3,6 +3,7 @@ from sqlalchemy.orm import Session
 
 from app.database_config import SessionLocal
 from app.orm_models.inbed_daily import InBedDaily
+from app.orm_models.resident import Resident
 
 # Paths to your CSV files (adjust names if needed)
 FILE_TIME_IN_BED = "app/data/timeinbed.csv"
@@ -13,15 +14,15 @@ FILE_TIMES_OUT_BED = "app/data/timesoutofbed.csv"
 db: Session = SessionLocal()
 
 # Insert resident
-# resident_name = "John Doe"
-# room_number = "100"
+resident_name = "Fleur de Groot"
+room_number = "105"
 
-# new_resident = Resident(name=resident_name, room_number=room_number)
-# db.add(new_resident)
-# db.commit()
-# db.refresh(new_resident)
-# resident_id = new_resident.id
-# print(f"Created new resident '{resident_name}' with ID {resident_id} ")
+new_resident = Resident(name=resident_name, room_number=room_number)
+db.add(new_resident)
+db.commit()
+db.refresh(new_resident)
+resident_id = new_resident.id
+print(f"Created new resident '{resident_name}' with ID {resident_id} ")
 
 # Load all CSVs with correct date parsing
 time_in_bed = pd.read_csv(
@@ -65,7 +66,7 @@ for _, row in merged.iterrows():
         high_activity=row["high_activity"],
         times_out_bed_night=row["times_out_bed_night"],
         times_out_bed_day=row["times_out_bed_day"],
-        resident_id=1,  # assume this data belongs to resident with ID=1
+        resident_id=6,  # assume this data belongs to resident with ID=1
     )
     db.add(record)
 
