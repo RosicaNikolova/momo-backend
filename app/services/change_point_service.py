@@ -79,9 +79,8 @@ def compute_change_points(
         # constant signal -> zero-centered; no variance to exploit
         sig_std = sig - mean
 
-    # pen = 3.0 * float(np.log(n + 1))
-
-    pen = 1
+    # Basic heuristic: penalty = log(n)
+    pen = float(np.log(n))
     algo = rpt.Pelt(model="l2").fit(sig_std)
     # print(f"using penalty: {pen}")
     # print(f"signal (std): {sig_std}")
