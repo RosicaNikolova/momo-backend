@@ -58,10 +58,8 @@ def compute_change_points(
 
     df = records_to_df(rows)  # oldest->newest
     # prepare numeric signal; fill small gaps
-    print(f"data frame: {df}")
     # use explicit ffill()/bfill() to satisfy pandas stubs and linters
     signal = df["value"].ffill().bfill().to_numpy()
-    print(f"signal: {signal}")
     # ensure 2D signal is acceptable to ruptures (univariate -> 1d is fine)
 
     if signal.size == 0:
@@ -74,7 +72,7 @@ def compute_change_points(
     sig = signal.astype(float)
     mean = float(np.mean(sig)) if n > 0 else 0.0
     std = float(np.std(sig, ddof=0)) if n > 0 else 0.0
-    print(f"mean: {mean}, std: {std}")
+    # print(f"mean: {mean}, std: {std}")
     if std > 0:
         sig_std = (sig - mean) / std
     else:
@@ -85,13 +83,13 @@ def compute_change_points(
 
     pen = 1
     algo = rpt.Pelt(model="l2").fit(sig_std)
-    print(f"using penalty: {pen}")
-    print(f"signal (std): {sig_std}")
+    # print(f"using penalty: {pen}")
+    # print(f"signal (std): {sig_std}")
 
     # sensitivity
     bkps = algo.predict(pen=pen)
 
-    print(f"breakpoints: {bkps}")
+    # print(f"breakpoints: {bkps}")
     # Convert breakpoints to 0-based indices for the last element of each segment (exclude final len)
     cp_indices = [b - 1 for b in bkps if b - 1 < len(signal) and b - 1 >= 0]
     # Remove possible duplicate of final index

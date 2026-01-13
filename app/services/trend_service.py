@@ -61,7 +61,7 @@ def format_description(metric_name: str, diff_sec: float) -> str:
     verb = "increased" if diff_sec > 0 else "decreased"
     abs_diff = abs(diff_sec)
     hours = int(abs_diff // 3600)
-    minutes = int((abs_diff % 3600) // 60)
+    minutes = round((abs_diff % 3600) / 60)
     if hours and minutes:
         time_str = f"{hours}h and {minutes} minutes"
     elif hours:
@@ -85,7 +85,7 @@ def format_seconds_h_min(val_sec: float) -> str:
     # Use absolute value so unit parts (hours/minutes) are never negative
     sec_abs = abs(sec)
     hours = int(sec_abs // 3600)
-    minutes = int((sec_abs % 3600) // 60)
+    minutes = round((sec_abs % 3600) / 60)
     if hours and minutes:
         return f"{hours}h {minutes}min"
     if hours:
@@ -118,21 +118,25 @@ def compute_trend(resident_id: int, metric: str, db: Session) -> TrendRead | Non
 
     # convert to DataFrame for easy slicing/aggregation
     df = records_to_df(records)
-    print(f"data frame: {df}")
+    # print(f"data frame: {df}")
     if df.empty or len(df) < 7:
         return None
 
     # compute baseline and last7 in seconds
     baseline_sec, last7_sec = compute_baseline_last7(df["value"])  # seconds
-    difference_sec = last7_sec - baseline_sec
-    print(f"difference: {difference_sec}")
+
+    # Round to nearest minute (60 seconds) BEFORE calculating difference
+    # This ensures consistency between displayed values and the difference
+    baseline_sec_rounded = round(baseline_sec / 60) * 60
+    last7_sec_rounded = round(last7_sec / 60) * 60
+    difference_sec = last7_sec_rounded - baseline_sec_rounded
 
     # human-friendly description (uses absolute units but states direction)
     description = format_description(metric, difference_sec)
 
     # format numeric fields as strings like '2h 30min'
-    baseline_hours = format_seconds_h_min(baseline_sec)
-    last7_hours = format_seconds_h_min(last7_sec)
+    baseline_hours = format_seconds_h_min(baseline_sec_rounded)
+    last7_hours = format_seconds_h_min(last7_sec_rounded)
     difference_hours = format_seconds_h_min(difference_sec)
 
     return TrendRead(
